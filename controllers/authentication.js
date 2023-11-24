@@ -12,6 +12,7 @@ const signup = async (req, res) => {      //signup function or password change f
 
     const doctor_id = req.body.doctor_id;
     const password = req.body.password;
+    const mobile_no = req.body.mobile_no;
 
     const connection = doctor_mongodb_url+doctor_id;
     console.log(connection);
@@ -31,6 +32,7 @@ const signup = async (req, res) => {      //signup function or password change f
                 const doctor = new auth({
                     username: doctor_id,
                     password: password,
+                    mobile_no: mobile_no,
                 });
 
                 await doctor.save()

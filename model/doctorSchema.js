@@ -9,6 +9,10 @@ const authSchema = new mongoose.Schema({
     password: {
         type: String,
         required:true,
+    },
+    mobile_no: {
+        type: String,
+        required: true,
     }
     
 });
