@@ -24,21 +24,32 @@ const signup = async (req, res) => {
         }
     );
 
-    const doctor = new auth({
-        username: doctor_id,
-        password: password,
-    });
+    auth.find({username: doctor_id, password: password})
+        .then( async (doctor) => {
+            if (doctor.length === 0) {
 
-    await doctor.save()
-        .then(() => {
-            console.log('Doctor added to database');
-            res.status(200).json({message: 'Doctor added to database'});
+                const doctor = new auth({
+                    username: doctor_id,
+                    password: password,
+                });
+
+                await doctor.save()
+                    .then(() => {
+                        console.log('Doctor added to database');
+                        res.status(200).json({ message: 'Doctor added to database' });
+                    })
+                    .catch((err) => {
+                        console.log('Error adding doctor to database', err);
+                        res.status(500).json({ message: 'Error adding doctor to database' });
+                    }
+                    );
+            }
+            else {
+                console.log('Doctor already exists');
+                res.status(409).json({ message: 'Doctor already exists' });
+            }
         })
-        .catch((err) => {
-            console.log('Error adding doctor to database', err);
-            res.status(500).json({message: 'Error adding doctor to database'});
-        }
-    );
+
 
 }
 
@@ -74,7 +85,7 @@ const login = async (req, res) => {
         else {
             console.log('Doctor found');
             console.log(doctor);
-            if (doctor[0].password === password) {
+            if (doctor[doctor.length-1].password === password) {
                 console.log('Doctor authenticated');
                 res.status(200).json({message: 'Doctor authenticated'});
             }
