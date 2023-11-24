@@ -1,14 +1,14 @@
 const encrypt=require("mongoose-encryption");
 const doctor_mongodb_url=process.env.DOCTER_MONGODB_URL;
 const mongoose = require('mongoose');
-const authSchema = require('../model/doctorSchema');
+const {authSchema} = require('../model/doctorSchema');
 authSchema.plugin(encrypt, { secret:process.env.SECRET_KEY, encryptedFields: ['password'] });   //encrypt password field in database
 
 const signup = async (req, res) => {      //signup function or password change function
 
     mongoose.connection.close();
 
-    const auth = mongoose.model('Doctor', authSchema);
+    const auth = mongoose.model('auth', authSchema);
 
     const doctor_id = req.body.doctor_id;
     const password = req.body.password;
@@ -60,7 +60,7 @@ const login = async (req, res) => {
 
     mongoose.connection.close();
     
-    const auth = mongoose.model('Doctor', authSchema);
+    const auth = mongoose.model('auth', authSchema);
     const doctor_id = req.body.doctor_id;
     const password = req.body.password;
     const connection = doctor_mongodb_url+doctor_id;
