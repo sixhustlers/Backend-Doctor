@@ -1,10 +1,10 @@
+const encrypt=require("mongoose-encryption");
 const doctor_mongodb_url=process.env.DOCTER_MONGODB_URL;
 const mongoose = require('mongoose');
 const authSchema = require('../model/doctorSchema');
+authSchema.plugin(encrypt, { secret:process.env.SECRET_KEY, encryptedFields: ['password'] });   //encrypt password field in database
 
-
-
-const signup = async (req, res) => {
+const signup = async (req, res) => {      //signup function or password change function
 
     mongoose.connection.close();
 
@@ -24,7 +24,7 @@ const signup = async (req, res) => {
         }
     );
 
-    auth.find({username: doctor_id, password: password})
+    auth.find({username: doctor_id, password: password})             //check if doctor and password already exists
         .then( async (doctor) => {
             if (doctor.length === 0) {
 
@@ -85,7 +85,7 @@ const login = async (req, res) => {
         else {
             console.log('Doctor found');
             console.log(doctor);
-            if (doctor[doctor.length-1].password === password) {
+            if (doctor[doctor.length-1].password === password) {                    //check if last updated password is correct
                 console.log('Doctor authenticated');
                 res.status(200).json({message: 'Doctor authenticated'});
             }
