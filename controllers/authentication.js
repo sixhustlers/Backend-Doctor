@@ -47,8 +47,8 @@ const signup = async (req, res) => {      //signup function or password change f
                     );
             }
             else {
-                console.log('Doctor already exists');
-                res.status(409).json({ message: 'Doctor already exists' });
+                console.log('Doctor already exists / Choose a different Username');
+                res.status(409).json({ message: 'Choose a different Username' });
             }
         })
 
