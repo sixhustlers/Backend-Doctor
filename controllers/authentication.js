@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const {authSchema} = require('../model/doctorSchema');
 authSchema.plugin(encrypt, { secret:process.env.SECRET_KEY, encryptedFields: ['password'] });   //encrypt password field in database
 
-const signup = async (req, res) => {      //signup function or password change function
+const register = async (req, res) => {      //signup function or password change function
 
     mongoose.connection.close();
 
@@ -101,4 +101,4 @@ const login = async (req, res) => {
 }
 
 
-module.exports = {login,signup};
+module.exports = {login,register};
