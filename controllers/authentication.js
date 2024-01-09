@@ -1,8 +1,9 @@
-const encrypt=require("mongoose-encryption");
-const doctor_mongodb_url=process.env.DOCTER_MONGODB_URL;
 const mongoose = require('mongoose');
-const {authSchema} = require('../model/doctorSchema');
+require('dotenv').config();
+const {detailsSchema,authSchema} = require('../model/doctorDetailsSchema');
+const encrypt=require("mongoose-encryption");
 authSchema.plugin(encrypt, { secret:process.env.SECRET_KEY, encryptedFields: ['password'] });   //encrypt password field in database
+const ISODate=require('isodate');
 
 const register = async (req, res) => {      //signup function or password change function
 
@@ -14,16 +15,9 @@ const register = async (req, res) => {      //signup function or password change
     const password = req.body.password;
     const mobile_no = req.body.mobile_no;
 
-    const connection = doctor_mongodb_url+doctor_id;
-    console.log(connection);
-    await mongoose.connect(connection)
-        .then(() => {
-            console.log('Connected to database');
-        })
-        .catch((err) => {
-            console.log('Error connecting to database', err);
-        }
-    );
+    // const connection = doctor_mongodb_url+doctor_id;
+    // console.log(connection);
+    
 
     auth.find({username: doctor_id, password: password})             //check if doctor and password already exists
         .then( async (doctor) => {
@@ -56,26 +50,60 @@ const register = async (req, res) => {      //signup function or password change
 }
 
 
+const registerForm=async(req,res)=>{
+    
+    try{
+        const {
+        doctor_id,
+        doctor_name,
+        doctor_sex,
+        doctor_dob_date,
+        doctor_dob_month,
+        doctor_dob_year,
+        doctor_phone,
+        doctor_email,
+        doctor_specialization_id,
+        doctor_qualification,
+        doctor_years_of_experience,
+        doctor_description
+    }=req.body;
 
+    const details=mongoose.model('detail',detailsSchema);
+
+    const detail=new details(
+        {
+        doctor_id,
+        doctor_name,
+        doctor_sex,
+        doctor_dob:ISODate(doctor_dob_year+"-"+doctor_dob_month+"-"+doctor_dob_date),
+        doctor_phone,
+        doctor_email,
+        doctor_specialization_id,
+        doctor_qualification,
+        doctor_years_of_experience,
+        doctor_description
+        }
+    )
+
+    await detail.save();
+        
+        console.log("Details added");
+    res.status(200).json({message:"Details added successfully"});
+    }
+    catch(err)
+    {
+        res.status(500).json({message:err.message});
+    }
+}
 
 const login = async (req, res) => {
-
-    mongoose.connection.close();
     
-    const auth = mongoose.model('auth', authSchema);
+    const auth = mongoose.model('auth',authSchema);
     const doctor_id = req.body.doctor_id;
     const password = req.body.password;
-    const connection = doctor_mongodb_url+doctor_id;
-    console.log(connection);
 
-    await mongoose.connect(connection)
-        .then(() => {
-            console.log('Connected to database');
-        })
-        .catch((err) => {
-            console.log('Error connecting to database', err);
-        }
-    );
+    // const connection = doctor_mongodb_url+doctor_id;
+    // console.log(connection);
 
     await auth.find({username: doctor_id})
     .then((doctor) => {
@@ -101,4 +129,4 @@ const login = async (req, res) => {
 }
 
 
-module.exports = {login,register};
+module.exports = {login,register,registerForm};
