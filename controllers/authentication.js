@@ -6,9 +6,7 @@ authSchema.plugin(encrypt, { secret:process.env.SECRET_KEY, encryptedFields: ['p
 const ISODate=require('isodate');
 
 const register = async (req, res) => {      //signup function or password change function
-
-    mongoose.connection.close();
-
+    console.log(req.body);
     const auth = mongoose.model('auth', authSchema);
 
     const doctor_id = req.body.doctor_id;
@@ -53,6 +51,7 @@ const register = async (req, res) => {      //signup function or password change
 const registerForm=async(req,res)=>{
     
     try{
+        console.log(req.body);
         const {
         doctor_id,
         doctor_name,
@@ -97,7 +96,7 @@ const registerForm=async(req,res)=>{
 }
 
 const login = async (req, res) => {
-    
+    console.log(req.body);
     const auth = mongoose.model('auth',authSchema);
     const doctor_id = req.body.doctor_id;
     const password = req.body.password;

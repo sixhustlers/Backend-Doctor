@@ -1,6 +1,10 @@
 const mongoose=require('mongoose');
 
 const eventsSchema=new mongoose.Schema({
+    doctor_id:{
+        type:String,
+        required:true,
+    },
     event_type:{
         type:String,
         required:true,
@@ -33,6 +37,10 @@ const eventsSchema=new mongoose.Schema({
 
     //appointment event schema
 
+    is_event_completed:{
+        type:Boolean,
+        default:false
+    },
     patient_unique_id:{
         type:String,
     },
