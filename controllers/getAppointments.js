@@ -1,6 +1,7 @@
 const mongoose=require('mongoose')
 const {eventsSchema}=require('../model/calendarEventsSchema');
-const ISODate=require('isodate')
+const ISODate=require('isodate');
+const moment = require('moment-timezone');
 
 const getAppointmentsForHomePage=async(req,res)=>{
     try{
@@ -12,22 +13,26 @@ const getAppointmentsForHomePage=async(req,res)=>{
     const event=mongoose.model('event',eventsSchema);
 
     // const newEvent=new event({
+    //     doctor_id:"12345678",
     //     event_type:"appointment",
     //     event_name:"patinet appointment",
-    //     event_daystart:ISODate("2024-01-12"),
+    //     event_daystart:moment().tz('Asia/Kolkata'),
+    //     // event_daystart:new Date("2024-01-10T09:33:48.464Z"),
     //     patient_unique_id:11122211,
-    //     patient_name:"Sanjay",
+    //     patient_name:"kushal",
     //     disease_name:"Tooth pain"
     // })
     // await newEvent.save();
-    const today= new Date(); // Current date and time in local system timezone
-    today.setMinutes(today.getMinutes() + 330); // Adjust for IST (UTC+5:30)
+
+
+    const today = moment().tz('Asia/Kolkata').set({hour:0,minute:0,second:0,millisecond:0}) // Current date and time in local system timezone
+    console.log(today);
     const allAppointments=await event.aggregate([
         {
     $match: {
       event_type,
       doctor_id,
-      event_daystart: { $gte: today },
+      event_daystart: { $gte: today.toDate() },
       is_event_completed: false,
     }
   },
@@ -42,7 +47,8 @@ const getAppointmentsForHomePage=async(req,res)=>{
         appointments: { $push:{
             patient_unique_id:"$patient_unique_id",
             patient_name:"$patient_name",
-            disease_name:"$disease_name"
+            disease_name:"$disease_name",
+            // event_daystart:"$event_daystart",
 
         }}
     }
@@ -72,11 +78,8 @@ const getAppointmentsForAppointmentPage=async(req,res)=>{
 
     const event=mongoose.model('event',eventsSchema);
 
-    const today= new Date(); // Current date and time in local system timezone
-today.setMinutes(today.getMinutes() + 330); // Adjust for IST (UTC+5:30)
-
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
+    const today = moment().tz('Asia/Kolkata').set({hour:0,minute:0,second:0,millisecond:0}) // Current date and time in local system timezone;
+    const tomorrow = moment(today).add(1, 'day').set({hour:0,minute:0,second:0,millisecond:0});
     console.log(today,tomorrow);
     
     const allAppointments=await event.aggregate([
@@ -86,8 +89,8 @@ tomorrow.setDate(today.getDate() + 1);
       event_daystart: {
         // $gte: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
         // $lt: new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
-        $gte: today,
-        $lt: tomorrow
+        $gte: today.toDate(),
+        $lt: tomorrow.toDate()
       },
       is_event_completed:false,
       doctor_id
@@ -99,12 +102,14 @@ tomorrow.setDate(today.getDate() + 1);
         // year: { $year: "$event_daystart" },
         // month: { $month: "$event_daystart" },
         date: { $dayOfMonth: "$event_daystart" }
+        // date: { $dateToString: { format: "%Y-%m-%d", date: "$event_daystart" } }
       },
 
         appointments: { $push:{
             patient_unique_id:"$patient_unique_id",
             patient_name:"$patient_name",
-            disease_name:"$disease_name"
+            disease_name:"$disease_name",
+            // event_daystart:"$event_daystart",
         }}
     }
   },
