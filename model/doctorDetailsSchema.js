@@ -17,7 +17,7 @@ const authSchema = new mongoose.Schema({
     
 });
 
-const detailsScheama = new mongoose.Schema({
+const detailsSchema = new mongoose.Schema({
 
     doctor_id: {
         type: String,
@@ -31,9 +31,10 @@ const detailsScheama = new mongoose.Schema({
         type: String,
         required: true,
     },
-    doctor_age: {
-        type: String,
+    doctor_dob: {
+        type: Date,
         required: true,
+        default:Date.now,
     },
     doctor_phone: {
         type: String,
@@ -42,7 +43,7 @@ const detailsScheama = new mongoose.Schema({
     doctor_email: {
         type: String,
     },
-    doctor_type_id: {
+    doctor_specialization_id: {
         type: String,
         required: true,
     },
@@ -50,9 +51,13 @@ const detailsScheama = new mongoose.Schema({
         type: String,
         required: true,
     },
-    doctor_experience: {
+    doctor_years_of_experience: {
         type: String,
         required: true,
+    },
+    doctor_description:{
+        type:String,
+
     }
 
 });
@@ -152,5 +157,5 @@ const timetableSchema = new mongoose.Schema({
 
 
 
-module.exports={authSchema,detailsScheama,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema};
+module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema};
 
