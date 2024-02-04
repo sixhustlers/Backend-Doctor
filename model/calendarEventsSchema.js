@@ -9,7 +9,6 @@ const eventsSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-
     event_name:{
         type:String, 
     },
@@ -34,7 +33,7 @@ const eventsSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    patient_unique_id:{
+    patient_id:{
         type:String,
     },
     disease_name:{

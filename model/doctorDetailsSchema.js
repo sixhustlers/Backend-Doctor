@@ -1,8 +1,9 @@
+const { ObjectId, Double } = require('mongodb');
 const mongoose = require('mongoose');
 
 const authSchema = new mongoose.Schema({
     
-    username: {
+    name: {
         type: String,
         required: true,
     },
@@ -43,23 +44,27 @@ const detailsSchema = new mongoose.Schema({
     doctor_email: {
         type: String,
     },
-    doctor_specialization_id: {
+    doctor_specialization: {
         type: String,
+    enum: ['option1', 'option2', 'option3', 'option4'],
         required: true,
+    },
+    doctor_hospitals: {
+        type:[mongoose.Schema.Types.ObjectId],
+        required: true
     },
     doctor_qualification: {
         type: String,
         required: true,
     },
     doctor_years_of_experience: {
-        type: String,
+        type: Double,
         required: true,
     },
     doctor_description:{
         type:String,
 
     }
-
 });
 
 const appointmentsSchema = new mongoose.Schema({
