@@ -68,7 +68,7 @@ const appointmentsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    appointment_data: {
+    appointment_date: {
         type: Date,
         required: true,
     },
