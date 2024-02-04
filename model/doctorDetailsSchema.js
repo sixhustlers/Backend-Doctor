@@ -139,7 +139,7 @@ const prescriptionsSchema = new mongoose.Schema({
 const hospitalsSchema = new mongoose.Schema({
 
     hospital_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     hospital_name: {
@@ -153,6 +153,19 @@ const hospitalsSchema = new mongoose.Schema({
 
 });
 
+const medicineSchema = new mongoose.Schema({
+    _id: {  //same as doctor_id
+        type: ObjectId,
+        required: true,
+    },
+    custom_meds:{
+        type: [String],
+    },
+    freq_meds:{
+        type: [String]
+    }
+})
+
 const timetableSchema = new mongoose.Schema({
 
 });
@@ -161,5 +174,5 @@ const timetableSchema = new mongoose.Schema({
 
 
 
-module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema};
+module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema, medicineSchema};
 
