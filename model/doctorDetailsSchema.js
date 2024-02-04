@@ -21,7 +21,7 @@ const authSchema = new mongoose.Schema({
 const detailsSchema = new mongoose.Schema({
 
     doctor_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     doctor_name: {
@@ -50,7 +50,7 @@ const detailsSchema = new mongoose.Schema({
         required: true,
     },
     doctor_hospitals: {
-        type:[mongoose.Schema.Types.ObjectId],
+        type:[ObjectId],
         required: true
     },
     doctor_qualification: {
@@ -70,7 +70,7 @@ const detailsSchema = new mongoose.Schema({
 const appointmentsSchema = new mongoose.Schema({
 
     patient_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     appointment_date: {
@@ -78,11 +78,10 @@ const appointmentsSchema = new mongoose.Schema({
         required: true,
     },
     prescription_id: {
-        type: String,
-        required: true,
+        type: ObjectId,
     },
     hospital_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
 

@@ -1,8 +1,9 @@
+const { ObjectId } = require('mongodb');
 const mongoose=require('mongoose');
 
 const eventsSchema=new mongoose.Schema({
     doctor_id:{
-        type:String,
+        type:ObjectId],
         required:true,
     },
     event_type:{
