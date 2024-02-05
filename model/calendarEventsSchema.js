@@ -1,31 +1,24 @@
+const { ObjectId } = require('mongodb');
 const mongoose=require('mongoose');
 
 const eventsSchema=new mongoose.Schema({
     doctor_id:{
-        type:String,
+        type:ObjectId],
         required:true,
     },
     event_type:{
         type:String,
         required:true,
     },
-
     event_name:{
-        type:String,
+        type:String, 
     },
     event_desc:{
-        type:String,
-    },
-    event_daystart:{
-        type:Date,
-        default:Date.now
-    },
-    event_dayend:{
-        type:Date,
-        
+        type:String, //for type="appointment" , event_desc is appoint desc obtained from the symptom form
     },
     event_start:{
         type:Date,
+        default: Date.now
     },
     event_end:{
         type:Date,
@@ -41,16 +34,12 @@ const eventsSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    patient_unique_id:{
-        type:String,
-    },
-    patient_name:{
+    patient_id:{
         type:String,
     },
     disease_name:{
         type:String,
     },
-
 })
 
 module.exports={eventsSchema}

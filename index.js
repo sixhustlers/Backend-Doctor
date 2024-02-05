@@ -1,18 +1,19 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 5000;
 const cors = require('cors');
+const mongoose = require('mongoose');
+const routes= require('./routes/apiRoutes');
 
 require('dotenv').config();
 
-const mongoose = require('mongoose');
+const port = process.env.PORT || 5000;
 const doctor_mongodb_url=process.env.DOCTOR_MONGODB_URL;
 
-const routes= require('./routes/apiRoutes');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.use('/api/', routes);
 
 

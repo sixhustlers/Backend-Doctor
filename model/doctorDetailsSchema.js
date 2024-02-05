@@ -1,8 +1,9 @@
+const { ObjectId, Double } = require('mongodb');
 const mongoose = require('mongoose');
 
 const authSchema = new mongoose.Schema({
     
-    username: {
+    name: {
         type: String,
         required: true,
     },
@@ -20,7 +21,7 @@ const authSchema = new mongoose.Schema({
 const detailsSchema = new mongoose.Schema({
 
     doctor_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     doctor_name: {
@@ -43,41 +44,44 @@ const detailsSchema = new mongoose.Schema({
     doctor_email: {
         type: String,
     },
-    doctor_specialization_id: {
+    doctor_specialization: {
         type: String,
+    enum: ['option1', 'option2', 'option3', 'option4'],
         required: true,
+    },
+    doctor_hospitals: {
+        type:[ObjectId],
+        required: true
     },
     doctor_qualification: {
         type: String,
         required: true,
     },
     doctor_years_of_experience: {
-        type: String,
+        type: Double,
         required: true,
     },
     doctor_description:{
         type:String,
 
     }
-
 });
 
 const appointmentsSchema = new mongoose.Schema({
 
     patient_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
-    appointment_data: {
+    appointment_date: {
         type: Date,
         required: true,
     },
     prescription_id: {
-        type: String,
-        required: true,
+        type: ObjectId,
     },
     hospital_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
 
@@ -135,7 +139,7 @@ const prescriptionsSchema = new mongoose.Schema({
 const hospitalsSchema = new mongoose.Schema({
 
     hospital_id: {
-        type: String,
+        type: ObjectId,
         required: true,
     },
     hospital_name: {
@@ -149,6 +153,19 @@ const hospitalsSchema = new mongoose.Schema({
 
 });
 
+const medicineSchema = new mongoose.Schema({
+    _id: {  //same as doctor_id
+        type: ObjectId,
+        required: true,
+    },
+    custom_meds:{
+        type: [String],
+    },
+    freq_meds:{
+        type: [String]
+    }
+})
+
 const timetableSchema = new mongoose.Schema({
 
 });
@@ -157,5 +174,5 @@ const timetableSchema = new mongoose.Schema({
 
 
 
-module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema};
+module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema, medicineSchema};
 
