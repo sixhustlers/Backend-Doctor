@@ -45,8 +45,8 @@ const detailsSchema = new mongoose.Schema({
         type: String,
     },
     doctor_specialization: {
-        type: String,
-    enum: ['option1', 'option2', 'option3', 'option4'],
+        type: [String],
+    // enum: ['option1', 'option2', 'option3', 'option4'],
     // specs:[String], //array of strings
         required: true,
     },
@@ -65,7 +65,10 @@ const detailsSchema = new mongoose.Schema({
     doctor_description:{
         type:String,
 
-    }
+    },
+    doctor_current_rating:{
+        type:Number,
+    },
 });
 
 const appointmentsSchema = new mongoose.Schema({
@@ -171,8 +174,24 @@ const timetableSchema = new mongoose.Schema({
 
 });
 
-
-
+const feedbackSchema = new mongoose.Schema({
+    doctor_id: {
+        type: String,
+        required: true,
+    },
+    patient_name: {
+        type: String,
+        required: true,
+    },
+    feedback: {
+        type: String,   
+        required: true,
+    },
+    rating: {
+        type: Number,
+        required: true,
+    }
+});
 
 
 module.exports={authSchema,detailsSchema,appointmentsSchema,prescriptionsSchema,hospitalsSchema,timetableSchema, medicineSchema};
