@@ -6,7 +6,7 @@ const routes= require('./routes/apiRoutes');
 
 require('dotenv').config();
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 const doctor_mongodb_url=process.env.DOCTOR_MONGODB_URL;
 
 
@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/', routes);
+app.use('/api/doctor', routes);
 
 
 app.listen(port, async() => {

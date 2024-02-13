@@ -13,6 +13,8 @@ const {
 
 const { getMeds, updateMeds } = require('../controllers/medicineController')
 
+const {fetchDoctorsCardDetails}=require('../controllers/patientBackendRequests')
+
 router.route('/').get(greet)
 router.route('/login').post(login)
 router.route('/register').post(register)
@@ -25,4 +27,9 @@ router
 
 router.route('/getFrequentlyUsedMedicines').get(getMeds)
 router.route('/updateFrequentlyUsedMedicines').post(updateMeds)
+
+router
+  .route('/fetchDoctorsCardDetails')
+  .post(fetchDoctorsCardDetails)
+
 module.exports = router
