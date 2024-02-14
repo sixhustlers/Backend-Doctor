@@ -64,7 +64,9 @@ const registerForm=async(req,res)=>{
         doctor_specialization_id,
         doctor_qualification,
         doctor_years_of_experience,
-        doctor_description
+        doctor_description,
+        doctor_current_rating,
+        doctor_current_hospital_id
     }=req.body;
 
     const details=mongoose.model('detail',detailsSchema);
@@ -80,7 +82,9 @@ const registerForm=async(req,res)=>{
         doctor_specialization_id,
         doctor_qualification,
         doctor_years_of_experience,
-        doctor_description
+        doctor_description,
+        doctor_current_rating,
+        doctor_current_hospital_id
         }
     )
 

@@ -13,7 +13,7 @@ const {
 
 const { getMeds, updateMeds } = require('../controllers/medicineController')
 
-const {fetchDoctorsCardDetails}=require('../controllers/patientBackendRequests')
+const {fetchDoctorsCardDetails,fetchDoctorDetails}=require('../controllers/patientBackendRequests')
 
 router.route('/').get(greet)
 router.route('/login').post(login)
@@ -28,8 +28,7 @@ router
 router.route('/getFrequentlyUsedMedicines').get(getMeds)
 router.route('/updateFrequentlyUsedMedicines').post(updateMeds)
 
-router
-  .route('/fetchDoctorsCardDetails')
-  .post(fetchDoctorsCardDetails)
+router.route('/fetchDoctorsCardDetails').post(fetchDoctorsCardDetails)
+router.route('/fetchDoctorDetails').post(fetchDoctorDetails)
 
 module.exports = router
