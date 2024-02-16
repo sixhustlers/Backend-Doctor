@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { detailsSchema } = require('../model/doctorDetailsSchema')
 
-// Server2
+
 exports.fetchDoctorsCardDetails = async (req, res) => {
   try {
     console.log(req.body)
@@ -31,4 +31,16 @@ exports.fetchDoctorsCardDetails = async (req, res) => {
     console.error(err.message)
     res.status(500).json({ message: err.message })
   }
+}
+
+exports.fetchDoctorDetails=async(req,res)=>{
+  try{
+    const {doctor_id}=req.body;
+    const doctorDetails=mongoose.model('details',detailsSchema);
+    const doctor_details=await doctorDetails.findOne({doctor_id});
+    res.status(200).json({doctor_details,time_slots:"to be figured out"});
+}
+catch(err){
+    res.status(500).json({message:err.message});
+}
 }

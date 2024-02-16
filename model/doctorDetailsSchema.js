@@ -69,6 +69,13 @@ const detailsSchema = new mongoose.Schema({
     doctor_current_rating:{
         type:Number,
     },
+    doctor_current_hospital_id:{
+        type:String,
+    },
+    // doctor_profile_picture: {
+    //     type: String,
+    // },
+
 });
 
 const appointmentsSchema = new mongoose.Schema({
