@@ -75,6 +75,11 @@ const eventMatrixSchema = new mongoose.Schema({
     type: [[String]],
     required: true,
   },
+  matrix_type: {
+    type: String,
+    enum:['real','reel'],
+    required:true
+  },
 })
 
 const appointmentsSchema = new mongoose.Schema({

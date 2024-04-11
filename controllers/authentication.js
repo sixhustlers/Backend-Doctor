@@ -6,8 +6,6 @@ const {
   authSchema,
 } = require('../models/doctorDetailsSchema')
 
-const {formEventMatrix} = require('./doctorEvents')
-
 const encrypt = require('mongoose-encryption')
 authSchema.plugin(encrypt, {
   secret: process.env.SECRET_KEY,
@@ -107,8 +105,6 @@ const registerForm = async (req, res) => {
     await detail.save()
     console.log('Details added')
     res.status(200).json({ message: 'Details added successfully' })
-
-    formEventMatrix(doctor_id, new Date())
   } catch (err) {
     console.log(err.message)
     res.status(500).json({ message: err.message })
