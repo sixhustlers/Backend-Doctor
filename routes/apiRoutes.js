@@ -6,7 +6,7 @@ const {
   registerForm,
 } = require('../controllers/authentication')
 
-const { updateDoctorSchedule } = require('../controllers/doctorEvents')
+const { updateDoctorSchedule,addEventToMatrix } = require('../controllers/doctorEvents')
 
 const {
   getAppointmentsForHomePage,
@@ -23,6 +23,8 @@ router.route('/').get(greet)
 router.route('/login').post(login)
 router.route('/register').post(register)
 router.route('/registerForm').post(registerForm)
+
+router.route('/addEvent/:doctor_id').post(addEventToMatrix)
 router.route('/updateDoctorSchedule/:doctor_id').post(updateDoctorSchedule)
 
 router.route('/homepage/getAppointments').get(getAppointmentsForHomePage)

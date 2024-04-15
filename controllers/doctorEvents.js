@@ -63,6 +63,7 @@ const updateDoctorSchedule = async (req, res) => {
       doctor_hospitals_locations: hospitals_locations_arr,
       doctor_hospitals_timings: hospitals_timings_arr,
       doctor_hospitals_days: hospitals_days_arr,
+      event_type:event_type,
       from: new Date(today),
       to: null,
     })
@@ -380,6 +381,103 @@ const createEventMatrix=async(doctor_id,date,week_schedule_arr)=>{
     })
 } 
 
+const addEventToMatrix=async(req,res)=>{
+  //const addEventToMatrix=async(doctor_id,date,event_time,event_duration,event_id)
+  try {
+    const date = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000)
+    const event_time = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000)
+    const event_duration = req.body.event_duration
+    const event_id = req.body.event_id
+    const doctor_id = req.params.doctor_id
+    const matrix_date = new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
+    matrix_date.setUTCHours(0, 0, 0, 0)
+    matrix_date.setUTCDate(1)
+    console.log(matrix_date)
+
+    const matrix_row = date.getUTCDate() - 1
+    const start_index =
+      event_time.getUTCHours() * 60 + event_time.getUTCMinutes() //the event_time is already according to the IST
+    const end_index = start_index + event_duration
+
+    const matrix = mongoose.model('eventMatrices', eventMatrixSchema)
+
+    var matrix_details = await matrix.find({
+      doctor_id,
+      matrix_date,
+      matrix_type: 'reel',
+    })
+
+    //checking if there is any matrix for that month and if not then creating a event matrix
+    if (matrix_details.length == 0) {
+      console.log('No matrix found')
+      const doctorSchedule = mongoose.model(
+        'doctorSchedules',
+        doctorHospitalsSchema
+      )
+
+      const doctor_schedule = await doctorSchedule.findOne({
+        doctor_id,
+        to: null,
+      })
+
+      const hospitals_id_name_color_arr =doctor_schedule.doctor_hospitals_id_name_color
+      const hospitals_locations_arr = doctor_schedule.doctor_hospitals_locations
+      const hospitals_timings_arr = doctor_schedule.doctor_hospitals_timings
+      const hospitals_days_arr = doctor_schedule.doctor_hospitals_days
+      const event_type = doctor_schedule.event_type
+
+      // const today = new Date(date.getTime() + 5.5 * 60 * 60 * 1000)
+
+      var week_schedule_arr = []
+      for (let i = 0; i < 7; i++) {
+        week_schedule_arr.push(new Array(1441).fill(null))
+      }
+
+      for (let i = 0; i < hospitals_days_arr.length; i++) {
+        let start_time =
+          hospitals_timings_arr[i][0].getUTCHours() * 60 +
+          hospitals_timings_arr[i][0].getUTCMinutes()
+        let end_time =
+          hospitals_timings_arr[i][1].getUTCHours() * 60 +
+          hospitals_timings_arr[i][1].getUTCMinutes()
+
+        for (let j = start_time - 1; j < end_time; j++) {
+          week_schedule_arr[hospitals_days_arr[i]][j] = event_type[i]
+        }
+      }
+
+      await createEventMatrix(doctor_id, new Date(), week_schedule_arr)
+
+      matrix_details = await matrix.find({
+        doctor_id,
+        matrix_date,
+        matrix_type: 'reel',
+      })
+    }
+
+    console.log(matrix_details)
+    const new_reel_matrix = matrix_details[0].event_matrix.map((arr) =>
+      arr.slice()
+    )
+
+    for (let i = start_index; i <= end_index; i++) {
+      new_reel_matrix[matrix_row][i] = event_id
+    }
+
+    await matrix.findOneAndUpdate(
+      { _id: matrix_details[0]._id },
+      {
+        event_matrix: new_reel_matrix,
+      }
+    )
+
+    res.status(200).json({ message: 'Event added successfully' })
+  } catch (err) {
+    console.log(err.message)
+    res.status(500).json({ message: err.message })
+  }
+}
+
 const unScheduledEvent=async(req,res)=>{
   try{
     const doctor_id=req.params.doctor_id;
@@ -432,4 +530,5 @@ const unScheduledEvent=async(req,res)=>{
   }
 }
 
-module.exports = { updateDoctorSchedule, formAndUpdateEventMatrix }
+
+module.exports = { updateDoctorSchedule, formAndUpdateEventMatrix ,addEventToMatrix}

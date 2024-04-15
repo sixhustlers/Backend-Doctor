@@ -16,6 +16,22 @@ const authSchema = new mongoose.Schema({
   },
 })
 
+const locationSchema = new mongoose.Schema({
+  hospital_id: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+  },
+  coordinates: {
+    type: [Number], // Assuming [latitude,longitude]
+    index: '2dsphere',
+    required: true,
+  },
+}) // schema of the hospital's location
+
+
 const detailsSchema = new mongoose.Schema({
   doctor_id: {
     type: String,
@@ -62,6 +78,15 @@ const detailsSchema = new mongoose.Schema({
   // },
 
   // timely changeable data
+  doctor_current_event:{
+    event_id:{
+      type: String,
+    },
+    from: {
+      type: Date,
+    },
+  },
+  
   doctor_current_rating: {
     type: Number,
   },
@@ -73,20 +98,6 @@ const detailsSchema = new mongoose.Schema({
   },
 })
 
-const locationSchema = new mongoose.Schema({
-  hospital_id: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-  },
-  coordinates: {
-    type: [Number], // Assuming [latitude,longitude]
-    index: '2dsphere',
-    required: true,
-  },
-}) // schema of the hospital's location
 
 // schema of the doctor's hospital details and it's weekly schedule
 const doctorHospitalsSchema = new mongoose.Schema({
@@ -106,6 +117,9 @@ const doctorHospitalsSchema = new mongoose.Schema({
   },
   doctor_hospitals_days: {
     type: [Number],
+  },
+  event_type:{
+    type:[String]
   },
   from: {
     type: Date,

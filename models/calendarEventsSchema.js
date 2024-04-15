@@ -88,9 +88,38 @@ const appointmentsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  patient_id: {
-    type: String,
-    required: true,
+  patient_details: {
+    patient_id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    dob: {
+      type: Date,
+    },
+    sex: {
+      type: String,
+      required: true,
+    },
+    bloodGroup: {
+      type: String,
+    },
+    proffession: {
+      type: String,
+    },
+    weight: {
+      type: Number,
+    },
+    height: {
+      type: Number,
+    },
+    symptoms: {
+      type: String,
+    },
+    
   },
   appointment_date: {
     type: Date,
