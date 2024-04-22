@@ -1,4 +1,4 @@
-const { medicineSchema } = require('../model/doctorDetailsSchema')
+const { medicineSchema } = require('../models/doctorDetailsSchema')
 const mongoose = require('mongoose')
 
 const Medicine = mongoose.model('Medicines', medicineSchema)
