@@ -6,7 +6,11 @@ const {
   registerForm,
 } = require('../controllers/authentication')
 
-const { updateDoctorSchedule,addEventToMatrix } = require('../controllers/doctorEvents')
+const {
+  updateDoctorSchedule,
+  startNewEvent,
+  endCurrentEvent,
+} = require('../controllers/doctorEvents')
 
 const {
   getAppointmentsForHomePage,
@@ -19,12 +23,15 @@ const {fetchDoctorsCardDetails,fetchDoctorDetails}=require('../controllers/patie
 
 const {doctorRecommenderSystemInfo}=require('../controllers/mlBackendRequests')
 
+const {addNewEvent}=require('../controllers/hospitalBackendRequests')
+
 router.route('/').get(greet)
 router.route('/login').post(login)
 router.route('/register').post(register)
 router.route('/registerForm').post(registerForm)
 
-router.route('/addEvent/:doctor_id').post(addEventToMatrix)
+router.route('/startEvent/:doctor_id').post(startNewEvent);
+router.route('/endEvent/:doctor_id').post(endCurrentEvent);
 router.route('/updateDoctorSchedule/:doctor_id').post(updateDoctorSchedule)
 
 router.route('/homepage/getAppointments').get(getAppointmentsForHomePage)
@@ -37,5 +44,7 @@ router.route('/fetchDoctorsCardDetails').post(fetchDoctorsCardDetails)
 router.route('/fetchDoctorDetails').post(fetchDoctorDetails)
 
 router.route('/doctorRecommenderSystemInfo').post(doctorRecommenderSystemInfo)
+
+router.route('/newAppointment/:doctor_id').post(addNewEvent);
 
 module.exports = router

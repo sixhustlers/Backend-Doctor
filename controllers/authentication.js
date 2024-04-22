@@ -101,6 +101,8 @@ const registerForm = async (req, res) => {
       doctor_qualification,
       doctor_experience: new Date(exp.getTime() + 5.5 * 60 * 60 * 1000),
       doctor_description,
+      doctor_current_rating,
+      doctor_current_hospital_id,
     })
     await detail.save()
     console.log('Details added')

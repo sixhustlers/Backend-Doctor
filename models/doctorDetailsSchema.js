@@ -80,7 +80,7 @@ const detailsSchema = new mongoose.Schema({
   // timely changeable data
   doctor_current_event:{
     event_id:{
-      type: String,
+      type: ObjectId,
     },
     from: {
       type: Date,

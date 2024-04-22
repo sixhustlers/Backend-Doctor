@@ -9,7 +9,7 @@ const eventsSchema = new mongoose.Schema({
   // event_id:{
   //   type: ObjectId,
   //   required:true
-  // }, 
+  // },
   // use the _id as the event_id
   event_type: {
     enum: [
@@ -27,17 +27,17 @@ const eventsSchema = new mongoose.Schema({
   event_desc: {
     actor_id_name: {
       //generally the actor_id will be the patient_id
-      type: [String, String],
+      type: [String],
     },
     place_id_name: {
       //generally the place_id will be the hospital_id
-      type: [String, String],
+      type: [String],
     },
     cause_id_name: {
       // generally the cause_name will be the disease_name
-      type: [String, String],
+      type: [String],
     },
-    
+
     event_info: {
       type: String,
     },
@@ -45,8 +45,8 @@ const eventsSchema = new mongoose.Schema({
   event_start: {
     type: Date,
   },
-  event_end: {
-    type: Date,
+  event_duration: {
+    type: Number, //in minutes
   },
 
   event_color: {
@@ -54,8 +54,97 @@ const eventsSchema = new mongoose.Schema({
   },
 
   is_event_completed: {
-    type: Boolean,
-    default: false,
+    type: {
+      type: Boolean,
+      default: false,
+    },
+    reason: {
+      type: String, // reason if the appointment or event is cancelled
+    },
+  },
+})
+
+const appointmentsSchema = new mongoose.Schema({
+  //the event_id will be the appointment_id for the appointment event and it will be stored in _id;
+  doctor_id: {
+    type: String,
+    required: true,
+  },
+  patient_details: {
+    patient_id: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    dob: {
+      type: Date,
+    },
+    sex: {
+      type: String,
+      enum: ['M', 'F', 'O'],
+      required: true,
+    },
+    blood_group: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    proffession: {
+      type: String,
+    },
+    weight: {
+      type: Number,
+    },
+    height: {
+      type: Number,
+    },
+    symptoms: {
+      type: String,
+    },
+  },
+  appointment_date: {
+    type: Date,
+  },
+  hospital_id_name: {
+    type: [String],
+  },
+  // store the disease name and id according to the symptom analysis
+  system_symptoms_disease_id_name: {
+    type: [String],
+  },
+  // store the disease name and id according to the doctor
+  actual_symptoms_disease_id_name: {
+    type: [String],
+  },
+  is_patient_diagnosed: {
+    type: {
+      type: Boolean,
+      default: false,
+    },
+    reason: {
+      type: String, // reason if the appointment is cancelled
+    },
+  },
+  //update all these when the appointment is finished
+  // also send the prescription to the patient and update there
+  prescription_details: {
+    prescription_id: {
+      type: ObjectId,
+    },
+    presciption_date: {
+      type: String,
+    },
+    hospital_id_name: {
+      type: [String, String],
+    },
+    prescription_json: {
+      type: {},
+    },
+    lab_test_json: {
+      type: {},
+    },
   },
 })
 
@@ -82,68 +171,6 @@ const eventMatrixSchema = new mongoose.Schema({
   },
 })
 
-const appointmentsSchema = new mongoose.Schema({
-  //the event_id will be the appointment_id for the appointment event and it will be stored in _id;
-  doctor_id: {
-    type: String,
-    required: true,
-  },
-  patient_details: {
-    patient_id: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    dob: {
-      type: Date,
-    },
-    sex: {
-      type: String,
-      required: true,
-    },
-    bloodGroup: {
-      type: String,
-    },
-    proffession: {
-      type: String,
-    },
-    weight: {
-      type: Number,
-    },
-    height: {
-      type: Number,
-    },
-    symptoms: {
-      type: String,
-    },
-    
-  },
-  appointment_date: {
-    type: Date,
-  },
-  prescription_details: {
-    prescription_id: {
-      type: ObjectId,
-      required: true,
-    },
-    presciption_date: {
-      type: String,
-    },
-    hospital_id_name: {
-      type: [String, String],
-    },
-    prescription_json: {
-      type: {},
-      required: true,
-    },
-    lab_test_json: {
-      type: {},
-      required: true,
-    },
-  },
-})
 
-module.exports={eventsSchema,eventMatrixSchema,appointmentsSchema}
+
+module.exports = { eventsSchema, eventMatrixSchema, appointmentsSchema }
